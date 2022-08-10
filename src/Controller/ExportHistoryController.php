@@ -52,10 +52,19 @@ class ExportHistoryController extends AbstractController
             $exportsHistory[$key]->display_export_place = $export->getExportPlace();
         }
 
-        return $this->render('export_history/index.html.twig',
-            [
-                'controller_name' => 'ExportHistoryController',
-                'exportsHistory' => $exportsHistory,
+        if ($request->isXMLHttpRequest()) {
+            return new JsonResponse(['view' => $this->render('export_history/index.html.twig',
+                [
+                    'controller_name' => 'ExportHistoryController',
+                    'exportsHistory' => $exportsHistory,
+                ])->getContent(),
             ]);
+        } else {
+            return $this->render('export_history/index.html.twig',
+                [
+                    'controller_name' => 'ExportHistoryController',
+                    'exportsHistory' => $exportsHistory,
+                ]);
+        }
     }
 }

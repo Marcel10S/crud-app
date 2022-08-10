@@ -54,8 +54,10 @@
             url: "{{ path('app_export_history') }}",
             data: JSON.stringify(filter_data),
             dataType: 'json',
-            callback: (response) => {
-                if (response.error_msg) {
+            success: (response) => {
+                if (response.view) {
+                    $("body").html(response.view);
+                } else if (response.error_msg) {
                      alert(response.error_msg)
                 }
             },
