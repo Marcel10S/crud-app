@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-4" id="exports-history-filters">
             <div class="form-group">
-                <input type="text" class="form-control" id="export_place" placeholder="Lokal:">
-                <input type="text" class="form-control" id="date_from" name="date_from" placeholder="Data od:">
-                <input type="text" class="form-control" id="date_to" name="date_to" placeholder="Data do:">
+                <input type="text" class="form-control" id="export_place" placeholder="{{filters.export_place}}">
+                <input type="text" class="form-control" id="date_from" name="date_from" placeholder="{{filters.date_from}}">
+                <input type="text" class="form-control" id="date_to" name="date_to" placeholder="{{filters.date_to}}">
                 <button class="btn btn-info mt-2 text-white" id="submit_filters">Zatwierdź</button>
             </div>
         </div>
@@ -39,6 +39,9 @@
 </div>
 
 <script>
+    //TODO - Czyli co bym zaproponował dodania w większym wymiarze czasu 
+    // 1 Przeniesienie rozwiązań do osobnego pliku JS
+    // 2 Przeniesienie metod do klasy i załadowanie jej do pamięci cache
 
     $(document).ready(function(){
         retriveDatePickers();
@@ -91,29 +94,29 @@
     }
 
     function retriveDatePickers () {
-    let date_input;
-    let container;
-    let options;
+        let date_input;
+        let container;
+        let options;
 
-    date_input=$('input[name="date_from"]'); 
-    container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-    options={
-        format: 'yyyy-mm-dd',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-    };
-    date_input.datepicker(options);
+        date_input=$('input[name="date_from"]'); 
+        container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        options={
+            format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        };
+        date_input.datepicker(options);
 
-    date_input=$('input[name="date_to"]'); //our date input has the name "date"
-    container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-    options={
-        format: 'yyyy-mm-dd',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-    };
-    date_input.datepicker(options);
+        date_input=$('input[name="date_to"]'); //our date input has the name "date"
+        container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        options={
+            format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        };
+        date_input.datepicker(options);
     }
 
 </script>
