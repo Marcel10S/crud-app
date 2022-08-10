@@ -26,9 +26,9 @@
                     {% for export in exportsHistory %}
                         <tr>
                             <td>{{ export.display_name }}</td>
-                            <td>{{ export.display_assigned_person }}</td>
                             <td>{{ export.display_export_date }}</td>
                             <td>{{ export.display_export_time }}</td>
+                            <td>{{ export.display_assigned_person }}</td>
                             <td>{{ export.display_export_place }}</td>
                         </tr>
                     {% endfor %}
@@ -41,6 +41,7 @@
 <script>
 
     $(document).ready(function(){
+        retriveDatePickers();
         $("#submit_filters").click(() => {
             if (areDatesValid()) {
                 reloadExportsHistory(getFiltersData())
@@ -57,6 +58,7 @@
             success: (response) => {
                 if (response.view) {
                     $("body").html(response.view);
+                    retriveDatePickers();
                 } else if (response.error_msg) {
                      alert(response.error_msg)
                 }
@@ -65,9 +67,9 @@
     }
 
     function getFiltersData () {
-        const export_place = $("#export_place").val();
-        const date_from = $("#date_from").val();
-        const date_to = $("#date_to").val();
+        let export_place = $("#export_place").val();
+        let date_from = $("#date_from").val();
+        let date_to = $("#date_to").val();
 
         return {
             export_place: export_place,
@@ -77,8 +79,8 @@
     }
 
     function areDatesValid () {
-        const date_from = $("#date_from").val();
-        const date_to = $("#date_to").val();
+        let date_from = $("#date_from").val();
+        let date_to = $("#date_to").val();
         if (
             date_from === "" || date_from === undefined 
             || date_to === "" || date_to === undefined
@@ -88,31 +90,41 @@
         return date_to > date_from;
     }
 
-</script>
-<script>
-    $(document).ready(function(){
-      var date_input=$('input[name="date_from"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
+    function retriveDatePickers () {
+    let date_input;
+    let container;
+    let options;
+
+    date_input=$('input[name="date_from"]'); 
+    container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+    options={
         format: 'yyyy-mm-dd',
         container: container,
         todayHighlight: true,
         autoclose: true,
-      };
-      date_input.datepicker(options);
+    };
+    date_input.datepicker(options);
+
+    date_input=$('input[name="date_to"]'); //our date input has the name "date"
+    container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+    options={
+        format: 'yyyy-mm-dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    };
+    date_input.datepicker(options);
+    }
+
+</script>
+<script>
+    $(document).ready(function(){
+
     })
 </script>
 <script>
     $(document).ready(function(){
-      var date_input=$('input[name="date_to"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-        format: 'yyyy-mm-dd',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-      };
-      date_input.datepicker(options);
+
     })
 </script>
 
