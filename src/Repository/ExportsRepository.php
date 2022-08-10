@@ -42,8 +42,8 @@ class ExportsRepository extends ServiceEntityRepository
     public function getRecordsByFilters(array $filters)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('u');
-        !empty($filters['export_place']) ? $qb->Andwhere("e.export_date = '{$filters['export_place']}'") : null;
+        $qb->select('e');
+        !empty($filters['export_place']) ? $qb->Andwhere("e.export_place = '{$filters['export_place']}'") : null;
         !empty($filters['date_from']) ? $qb->Andwhere("e.export_date > '{$filters['date_from']}'") : null;
         !empty($filters['date_to']) ? $qb->Andwhere("e.export_date < '{$filters['date_to']}'") : null;
         return $qb->getQuery()->getResult();

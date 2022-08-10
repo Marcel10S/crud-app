@@ -25,11 +25,11 @@
                 <tbody>
                     {% for export in exportsHistory %}
                         <tr>
-                            <td>{{ export.name }}</td>
-                            <td>{{ export.export_date }}</td>
-                            <td>{{ export.export_time }}</td>
-                            <td>{{ export.assigned_user }}</td>
-                            <td>{{ export.export_place }}</td>
+                            <td>{{ export.display_name }}</td>
+                            <td>{{ export.display_assigned_person }}</td>
+                            <td>{{ export.display_export_date }}</td>
+                            <td>{{ export.display_export_time }}</td>
+                            <td>{{ export.display_export_place }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -52,7 +52,7 @@
         $.ajax({
             type: "POST",
             url: "{{ path('app_export_history') }}",
-            data: filter_data,
+            data: JSON.stringify(filter_data),
             dataType: 'json',
             callback: (response) => {
                 if (response.error_msg) {

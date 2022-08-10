@@ -30,7 +30,7 @@ class Exports
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $assigned_user;
+    private $assigned_person;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -66,14 +66,14 @@ class Exports
         return $this;
     }
 
-    public function getAssignedUser(): ?string
+    public function getAssignedPerson(): ?string
     {
-        return $this->assigned_user;
+        return $this->assigned_person;
     }
 
-    public function setAssignedUser(string $assigned_user): self
+    public function setAssignedPerson(string $assigned_person): self
     {
-        $this->assigned_user = $assigned_user;
+        $this->assigned_person = $assigned_person;
 
         return $this;
     }
