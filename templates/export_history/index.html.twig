@@ -1,0 +1,120 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="exports-history-container" id="exports-history-container">
+    <div class="row">
+        <div class="col-4" id="exports-history-filters">
+            <div class="form-group">
+                <input type="text" class="form-control" id="export_place" placeholder="Lokal:">
+                <input type="text" class="form-control" id="date_from" name="date_from" placeholder="Data od:">
+                <input type="text" class="form-control" id="date_to" name="date_to" placeholder="Data do:">
+                <button class="btn btn-info mt-2 text-white" id="submit_filters">Zatwierdź</button>
+            </div>
+        </div>
+        <div class="col-8" id="exports-history-data">
+            <table class="table table-striped" id="weather_list">
+                <thead>
+                    <tr>
+                        <th scope="col">Nazwa</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Godzina</th>
+                        <th scope="col">Użytkownik</th>
+                        <th scope="col">Lokal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for export in exportsHistory %}
+                        <tr>
+                            <td>{{ export.name }}</td>
+                            <td>{{ export.export_date }}</td>
+                            <td>{{ export.export_time }}</td>
+                            <td>{{ export.assigned_user }}</td>
+                            <td>{{ export.export_place }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+        $("#submit_filters").click(() => {
+            if (areDatesValid()) {
+                reloadExportsHistory(getFiltersData())
+            }
+        })
+    })
+
+    function reloadExportsHistory (filter_data) {
+        $.ajax({
+            type: "POST",
+            url: "{{ path('app_export_history') }}",
+            data: filter_data,
+            dataType: 'json',
+            callback: (response) => {
+                if (response.error_msg) {
+                     alert(response.error_msg)
+                }
+                else if (response.success_msg) {
+                    alert(response.success_msg)
+                }
+            },
+        })
+    }
+
+    function getFiltersData () {
+        const export_place = $("#export_place").val();
+        const date_from = $("#date_from").val();
+        const date_to = $("#date_to").val();
+
+        return {
+            export_place: export_place,
+            date_from: date_from,
+            date_to: date_to,
+        }
+    }
+
+    function areDatesValid () {
+        const date_from = $("#date_from").val();
+        const date_to = $("#date_to").val();
+        if (
+            date_from === "" || date_from === undefined 
+            || date_to === "" || date_to === undefined
+        ) {
+            return true;
+        } 
+        return date_to > date_from;
+    }
+
+</script>
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date_from"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'yyyy-mm-dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+</script>
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date_to"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'yyyy-mm-dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+</script>
+
+{% endblock %}
