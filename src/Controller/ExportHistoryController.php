@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,15 +15,28 @@ class ExportHistoryController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        //przyjmij wartości z z $requesta co do filtrów
-        //jeżeli filtry puste weż dane z
-        // $data = $this->getDoctrine()->getRepository(Crud::class)->findAll();
-        //jeżeli filtry nie puste trza dodać w repozitory pobranie danych 
+        if (!$request->isXMLHttpRequest()) {
+            return new JsonResponse(['error_msg' => 'Błąd wprowadzono niepoprawne dane']);
+        }
+        $content = $request->getContent();
+        if (empty($content)) {
+            return new JsonResponse(['error_msg' => 'Błąd wprowadzono niepoprawne dane']);
+        }
+        $filters = json_decode($content, true);
+        if (
+            empty($filters['export_place'])
+            && empty($filters['date_from'])
+            && empty($filters['date_to'])
+        ) {
+            $exportsHistory =  $this->getDoctrine()->getRepository(Entity::class)->findAll();
+        } else {
+            $exportsHistory = $this->doctrine->getRepository(Entity::class)->getRecordsByFilters($filters);
+        }
 
-        $data = $this->getDoctrine()->getRepository(Crud::class)->findAll();
-        return $this->render('export_history/index.html.twig', [
-            'controller_name' => 'ExportHistoryController',
-            'data' => $data,
-        ]);
+        return $this->render('export_history/index.html.twig',
+            [
+                'controller_name' => 'ExportHistoryController',
+                'exportsHistory' => $exportsHistory,
+            ]);
     }
 }

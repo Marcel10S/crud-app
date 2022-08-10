@@ -39,28 +39,13 @@ class ExportsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Exports[] Returns an array of Exports objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Exports
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getRecordsByFilters(array $filters)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('u');
+        !empty($filters['export_place']) ? $qb->Andwhere("e.export_date = '{$filters['export_place']}'") : null;
+        !empty($filters['date_from']) ? $qb->Andwhere("e.export_date > '{$filters['date_from']}'") : null;
+        !empty($filters['date_to']) ? $qb->Andwhere("e.export_date < '{$filters['date_to']}'") : null;
+        return $qb->getQuery()->getResult();
+    }
 }
